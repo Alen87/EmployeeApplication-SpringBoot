@@ -2,6 +2,8 @@ package com.employee.EmployeeApplication.controller;
 
 
 import com.employee.EmployeeApplication.entity.Employee;
+import com.employee.EmployeeApplication.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,14 +18,17 @@ import java.util.List;
 // @RestController  // isto znacenje, kombinacija  @Controller + @ResponseBody
 public class EmployeeController {
 
+
+    @Autowired
+    EmployeeService employeeService;
+
+
     @RequestMapping("/employees")
     public List<Employee> findAllEmployees() {
 
-         List<Employee> employeeList = Arrays.asList(
-                new Employee(1, "First Employee", "Washington"),
-                new Employee(2, "Second Employee", "New York")
-        );
-        return employeeList;
+            return employeeService.getAllEmployees();
+
+
 
     }
 
