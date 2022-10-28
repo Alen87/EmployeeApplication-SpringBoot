@@ -21,12 +21,15 @@ public class EmployeeService {
 
     public List<Employee> getAllEmployees(){
 
-        return employeeList;
+       // return employeeList;
+        return employeeRepository.findAll();
     }
 
 
     public Employee getAnEmployee (int id){
-        return employeeList.stream().filter(e ->(e.getEmployeeId() == id)).findFirst().get();
+       // return employeeList.stream().filter(e ->(e.getEmployeeId() == id)).findFirst().get();
+
+        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Error"));
     }
 
    public void createEmployee (Employee employee){
