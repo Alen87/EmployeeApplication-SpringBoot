@@ -1,9 +1,12 @@
 package com.employee.EmployeeApplication.entity;
 
+import com.employee.EmployeeApplication.repository.EmployeeRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "project")
@@ -16,7 +19,7 @@ public class Project {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "projects")
-    private List<Employee> employees;
+    private Set<Employee> employees = new HashSet<Employee>();
 
 
 
@@ -55,11 +58,11 @@ public class Project {
     }
 
 
-    public List<Employee> getEmployees() {
+    public Set<Employee> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<Employee> employees) {
+    public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
     }
 

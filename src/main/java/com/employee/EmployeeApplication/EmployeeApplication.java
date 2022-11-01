@@ -1,7 +1,9 @@
 package com.employee.EmployeeApplication;
 
 import com.employee.EmployeeApplication.entity.Address;
+import com.employee.EmployeeApplication.entity.Employee;
 import com.employee.EmployeeApplication.entity.Project;
+import com.employee.EmployeeApplication.entity.Spouse;
 import com.employee.EmployeeApplication.service.EmployeeService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,10 +21,23 @@ public class EmployeeApplication {
 
 
 	@Bean
-	public CommandLineRunner initialCreate(EmployeeService employeeService){
-	                   return(args) ->{
-						   Address address1 = new Address("Line 1","Line 2","ZipCode 1","City1","State1","Country1);
-						   Project project1 = new Project("Name 1","Client")
+	public CommandLineRunner initialCreate(EmployeeService employeeService) {
+		return (args) -> {
+
+			Address address1 = new Address("Line 1", "Line 2", "ZipCode1", "City1", "State1", "Country1");
+			Project project1 = new Project("Name1", "Client Name1");
+			Spouse spouse1 = new Spouse("Name1", "Mobile1", 30);
+
+			Employee employee = new Employee("Employee1","City1");
+			employee.addProject(project1);
+			employee.addAddress(address1);
+			employee.setSpouse(spouse1);
+
+			employeeService.createEmployee(employee);
+
+			System.out.println("Getting an employee");
+			Employee employee1 = employeeService.getAnEmployee(1);
+
 		};
 	}
 

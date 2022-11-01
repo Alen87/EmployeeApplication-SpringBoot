@@ -1,7 +1,11 @@
 package com.employee.EmployeeApplication.entity;
 
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Employee {
@@ -11,27 +15,31 @@ public class Employee {
     String employeeName;
     String employeeCity;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_spouse")
     private Spouse spouse;
 
-
-    @OneToMany(cascade =  {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Address> addresses;
-    @ManyToMany(cascade =  {CascadeType.PERSIST,CascadeType.REMOVE})
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinTable(name = "employee_project",
             joinColumns = @JoinColumn(name = "fk_employee"),
             inverseJoinColumns = @JoinColumn(name = "fk_project"))
-    private List<Project> projects;
+    private Set<Project> projects = new HashSet<>();
 
+    public Employee() {
+    }
+
+    public Employee(String employeeName, String employeeCity) {
+        this.employeeName = employeeName;
+        this.employeeCity = employeeCity;
+    }
 
     public Employee(int employeeId, String employeeName, String employeeCity) {
         this.employeeId = employeeId;
         this.employeeName = employeeName;
         this.employeeCity = employeeCity;
-    }
-
-    public Employee() {
     }
 
     public int getEmployeeId() {
@@ -58,7 +66,6 @@ public class Employee {
         this.employeeCity = employeeCity;
     }
 
-
     public Spouse getSpouse() {
         return spouse;
     }
@@ -66,7 +73,6 @@ public class Employee {
     public void setSpouse(Spouse spouse) {
         this.spouse = spouse;
     }
-
 
     public List<Address> getAddresses() {
         return addresses;
@@ -76,23 +82,32 @@ public class Employee {
         this.addresses = addresses;
     }
 
-    public void removeProject(Project project){
-
+    public void removeProject(Project project) {
         this.projects.remove(project);
         project.getEmployees().remove(project);
     }
 
-    public void addProject(Project project){
+    public void addProject(Project project) {
         this.projects.add(project);
         project.getEmployees().add(this);
-
     }
 
-    public List<Project> getProjects() {
+    public Set<Project> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<Project> projects) {
+    public void setProjects(Set<Project> projects) {
         this.projects = projects;
+    }
+
+    public void addAddress(Address address) {
+        this.addresses = new ArrayList<>();
+        this.addresses.add(address);
+        address.setEmployee(this);
+    }
+
+    public void removeAddress(Address address) {
+        this.addresses.remove(address);
+        address.setEmployee(null);
     }
 }
